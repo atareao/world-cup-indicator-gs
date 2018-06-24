@@ -33,6 +33,43 @@ const BASE_URL = 'worldcup.sfg.io';
 const USER_AGENT = 'GNOME Shell - World-Cup-Indicator-GS - extension';
 const HTTP_TIMEOUT = 10;
 
+var formatDate = function (formatDate, formatString) {
+    if(formatDate instanceof Date) {
+        var months = new Array("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec");
+        var yyyy = formatDate.getFullYear();
+        var yy = yyyy.toString().substring(2);
+        var m = formatDate.getMonth() + 1;
+        var mm = m < 10 ? "0" + m : m;
+        var mmm = months[m];
+        var d = formatDate.getDate();
+        var dd = d < 10 ? "0" + d : d;
+        var h = formatDate.getHours();
+        var hh = h < 10 ? "0" + h : h;
+        var n = formatDate.getMinutes();
+        var nn = n < 10 ? "0" + n : n;
+        var s = formatDate.getSeconds();
+        var ss = s < 10 ? "0" + s : s;
+
+        formatString = formatString.replace(/yyyy/i, yyyy);
+        formatString = formatString.replace(/yy/i, yy);
+        formatString = formatString.replace(/mmm/i, mmm);
+        formatString = formatString.replace(/mm/i, mm);
+        formatString = formatString.replace(/m/i, m);
+        formatString = formatString.replace(/dd/i, dd);
+        formatString = formatString.replace(/d/i, d);
+        formatString = formatString.replace(/hh/i, hh);
+        formatString = formatString.replace(/h/i, h);
+        formatString = formatString.replace(/nn/i, nn);
+        formatString = formatString.replace(/n/i, n);
+        formatString = formatString.replace(/ss/i, ss);
+        formatString = formatString.replace(/s/i, s);
+        return formatString;
+    } else {
+        return "";
+    }
+}
+
+
 class WorldCupClient{
     constructor(params){
         this._protocol = PROTOCOL;
@@ -52,21 +89,26 @@ class WorldCupClient{
         return this._build_query_url('matches/current')
     }
 
+    _build_matches_url_for(adate){
+        let adatestr = formatDate(adate, 'YYYY-mm-dd');
+        return this._build_query_url('matches?start_date=%s&end_date=%s'.format(
+            adatestr, adatestr));
+    }
     _build_today_matches_url(){
-        return this._build_query_url('matches/today')
+        let adate = new Date();
+        return this._build_matches_url_for(adate);
     }
 
     _build_tomorrow_matches_url(){
-        return this._build_query_url('matches/tomorrow')
+        let adate = new Date();
+        adate.setDate(adate.getDate()+1);
+        return this._build_matches_url_for(adate);
     }
 
     _build_yesterday_matches_url(){
-        let hoy = new Date();
-        hoy.setDate(hoy.getDate()-1);
-        let yesterday = hoy.toISOString().substr(0,10)
-        return this._build_query_url('matches?start_date=%s&end_date=%s'.format(
-            yesterday, yesterday
-            ));
+        let adate = new Date();
+        adate.setDate(adate.getDate()-1);
+        return this._build_matches_url_for(adate);
     }
 
     get_current_match(callback){
@@ -86,6 +128,7 @@ class WorldCupClient{
     }
 
     _get(callback, query_url) {
+        log('XXXX ' + query_url);
         let request = Soup.Message.new('GET', query_url);
         _get_soup_session().queue_message(request,
             (http_session, message) => {
@@ -152,45 +195,6 @@ function _get_soup_session() {
 
     return _SESSION;
 }
-
-let wcc = new WorldCupClient();
-wcc.get_tomorrow_matches((message, result) => {
-    if(message){
-        print(message);
-    }else{
-        if(result){
-            print(result);
-        }
-    }
-});
-
-function sleep(seconds) {
-    let milliseconds = seconds * 1000;
-    let start = new Date().getTime();
-    for (let i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-        break;
-    }
-  }
-}
-//sleep(3);
-const _httpSession = new Soup.SessionAsync();
-Soup.Session.prototype.add_feature.call(_httpSession, new Soup.ProxyResolverDefault());
-function get(url, callback) {
-    var request = Soup.Message.new('GET', url);
-    _httpSession.queue_message(request, function(_httpSession, message) {
-        if (message.status_code !== 200) {
-            callback(message.status_code, null);
-            return;
-        } else {
-            var albumart = request.response_body_data;
-            callback(null, icon);
-        };
-    });
-    print('te');
-}
-get('http://worldcup.sfg.io/matches/today/', (message, result)=>{
-    print(message);
-    print(result);
-});
-sleep(3);
+let hoy = new Date();
+print(hoy);
+print(formatDate(hoy, 'YYYY-mm-dd'));

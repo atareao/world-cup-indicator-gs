@@ -163,44 +163,41 @@ class WorldCupIndicator extends PanelMenu.Button{
         this.when_today_updated = ahora;
         this.when_otherday_updated = ahora;
 
-        this.updateCurrent();
-        this.updateToday();
-        this.updateTomorrow();
-        this.updateYesterday();
+        this.updater(true);
 
         this.sourceId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                                        60, // every minute
-                                                        ()=>{
-            this.updateToday();
-            let ahora = new Date();
-            if(ahora - this.when_today_updated > 300) {
-                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                         10,
-                                         ()=>{
-                                            this.when_today_updated = ahora;
-                                            this.updateToday();
-                                            return false;
-                                        });
-            }
-            if(ahora.getDay() != this.when_otherday_updated.getDay()) {
-                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                         20,
-                                         ()=>{
-                                            this.when_otherday_updated = ahora;
-                                            this.updateYesterday();
-                                            return false;
-                                        });
-                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                         30,
-                                         ()=>{
-                                            this.when_tomorrow_updated = ahora;
-                                            this.updateTomorrow();
-                                            return false;
-                                        });
-            }
-            return true;
-        });
-        //this.updateToday.bind(this));
+                                                 60, // every minute
+                                                 this.updater.bind(this));
+    }
+
+    updater(force=false){
+        let ahora = new Date();
+        this.updateCurrent();
+        if(force || ahora - this.when_today_updated > 300) {
+            this.when_today_updated = ahora;
+            GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                     5,
+                                     ()=>{
+                                        this.updateToday();
+                                        return false;
+                                    });
+        }
+        if(force || ahora.getDay() != this.when_otherday_updated.getDay()) {
+            this.when_otherday_updated = ahora;
+            GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                     10,
+                                     ()=>{
+                                        this.updateTomorrow();
+                                        return false;
+                                    });
+            GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                     15,
+                                     ()=>{
+                                        this.updateYesterday();
+                                        return false;
+                                    });
+        }
+        return true;
     }
 
     updateYesterday(){
