@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-24 12:02+0200\n"
+"POT-Creation-Date: 2018-06-24 18:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,35 +81,35 @@ msgstr ""
 msgid "About"
 msgstr ""
 
-#: extension.js:254
+#: extension.js:263
 msgid "Help"
 msgstr ""
 
-#: extension.js:256
+#: extension.js:265
 msgid "Project Page"
 msgstr ""
 
-#: extension.js:258
+#: extension.js:267
 msgid "Get help online..."
 msgstr ""
 
-#: extension.js:260
+#: extension.js:269
 msgid "Report a bug..."
 msgstr ""
 
-#: extension.js:263
+#: extension.js:272
 msgid "El atareao"
 msgstr ""
 
-#: extension.js:265
+#: extension.js:274
 msgid "Follow me in Twitter"
 msgstr ""
 
-#: extension.js:267
+#: extension.js:276
 msgid "Follow me in Facebook"
 msgstr ""
 
-#: extension.js:269
+#: extension.js:278
 msgid "Follow me in Google+"
 msgstr ""
 

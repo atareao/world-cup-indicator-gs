@@ -131,7 +131,7 @@ class WorldCupIndicator extends PanelMenu.Button{
         box.add(icon);
         this.actor.add_child(box);
 
-        this.current_match_section = new PopupMenu.PopupBaseMenuItem();
+        this.current_match_section = new PopupMenu.PopupMenuSection();
         this.menu.addMenuItem(this.current_match_section);
 
         this.today_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Today matches'));
@@ -158,22 +158,52 @@ class WorldCupIndicator extends PanelMenu.Button{
         this.menu.addMenuItem(this._get_help());
 
         this.worldCupClient = new WorldCupClient();
-        this.sourceCurrentId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                                        60, // every minute
-                                                        this.updateToday.bind(this));
-        this.sourceTodayId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                                      5 * 60, // every five minutes
-                                                      this.updateToday.bind(this));
-        this.sourceTomorrowId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                                         60 * 60, // every hour
-                                                         this.updateTomorrow.bind(this));
+
+        let ahora = new Date();
+        this.when_today_updated = ahora;
+        this.when_otherday_updated = ahora;
+
         this.updateCurrent();
         this.updateToday();
         this.updateTomorrow();
-        this.setYesterday();
+        this.updateYesterday();
+
+        this.sourceId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                                        60, // every minute
+                                                        ()=>{
+            this.updateToday();
+            let ahora = new Date();
+            if(ahora - this.when_today_updated > 300) {
+                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                         10,
+                                         ()=>{
+                                            this.when_today_updated = ahora;
+                                            this.updateToday();
+                                            return false;
+                                        });
+            }
+            if(ahora.getDay() != this.when_otherday_updated.getDay()) {
+                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                         20,
+                                         ()=>{
+                                            this.when_otherday_updated = ahora;
+                                            this.updateYesterday();
+                                            return false;
+                                        });
+                GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                         30,
+                                         ()=>{
+                                            this.when_tomorrow_updated = ahora;
+                                            this.updateTomorrow();
+                                            return false;
+                                        });
+            }
+            return true;
+        });
+        //this.updateToday.bind(this));
     }
 
-    setYesterday(){
+    updateYesterday(){
         if(this.yesterday_matches_section.menu.numMenuItems > 0){
             this.yesterday_matches_section.menu.removeAll();
         }
@@ -196,10 +226,18 @@ class WorldCupIndicator extends PanelMenu.Button{
 
     updateCurrent(){
         this.worldCupClient.get_current_match((message, result)=>{
-            this.current_match_section.actor.remove_all_children();
-            if(result != null){
-                let presult = JSON.parse(result);
-                this.current_match_section.actor.add_actor(new Match(presult));
+            let presult = JSON.parse(result);
+
+            if(this.current_match_section.numMenuItems > 0){
+                this.current_match_section.removeAll();
+            }
+            for(let amatch=0; amatch<presult.length; amatch++){
+                let item = new PopupMenu.PopupBaseMenuItem({
+                    can_focus: false,
+                    reactive: false
+                });
+                item.actor.add_actor(new Match(presult[amatch]));
+                this.current_match_section.addMenuItem(item);
             }
         });
         return true;
@@ -223,6 +261,7 @@ class WorldCupIndicator extends PanelMenu.Button{
         });
         return true;
     }
+
     updateTomorrow(){
         this.worldCupClient.get_tomorrow_matches((message, result)=>{
             let presult = JSON.parse(result);
@@ -286,8 +325,6 @@ function enable(){
 }
 
 function disable() {
-    GLib.source_remove(this.sourceCurrentId);
-    GLib.source_remove(this.sourceTodayId);
-    GLib.source_remove(this.sourceTomorrowId);
+    GLib.source_remove(this.sourceId);
     worldCupIndicator.destroy();
 }
