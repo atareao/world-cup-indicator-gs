@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordReference Search Provider - 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-23 20:02+0200\n"
+"POT-Creation-Date: 2018-06-24 12:02+0200\n"
 "PO-Revision-Date: 2018-06-02 19:46+0200\n"
 "Last-Translator: Lorenzo <lorenzo.carbonell.cerezo@gmail.com>\n"
 "Language-Team: Spanish\n"
@@ -67,6 +67,55 @@ msgstr "Color de peligro"
 msgid "Danger color for pie"
 msgstr "Color de peligro para la tarta"
 
+#: extension.js:137
+msgid "Today matches"
+msgstr "Los partidos de hoy"
+
+#: extension.js:140
+msgid "Tomorrow matches"
+msgstr "Los partidos para mañana"
+
+#: extension.js:143
+msgid "Yesterday matches"
+msgstr "Los partidos de ayer"
+
+#: extension.js:148 prefs.js:138
+msgid "About"
+msgstr "Acerca de..."
+
+#: extension.js:254
+msgid "Help"
+msgstr "Ayuda"
+
+#: extension.js:256
+msgid "Project Page"
+msgstr "Página del proyecto"
+
+#: extension.js:258
+msgid "Get help online..."
+msgstr "Encuentra ayuda en línea..."
+
+#: extension.js:260
+msgid "Report a bug..."
+msgstr "Informa de un error..."
+
+#: extension.js:263
+#, fuzzy
+msgid "El atareao"
+msgstr "atareao"
+
+#: extension.js:265
+msgid "Follow me in Twitter"
+msgstr "Sígueme en Twitter"
+
+#: extension.js:267
+msgid "Follow me in Facebook"
+msgstr "Sígueme en Facebook"
+
+#: extension.js:269
+msgid "Follow me in Google+"
+msgstr "Sígueme en Google+"
+
 #: preferenceswidget.js:217
 msgid "Nothing"
 msgstr "Nada"
@@ -79,76 +128,64 @@ msgstr "Cierto"
 msgid "False"
 msgstr "Falso"
 
-#: prefs.js:61
-msgid "Disk Space Usage"
-msgstr "Uso de espacio de disco"
+#: prefs.js:60
+msgid "World Cup Indicator"
+msgstr "Un indicador para el Mundial de Fútbol"
 
-#: prefs.js:66
+#: prefs.js:65
 msgid "Version: "
 msgstr "Versión: "
 
-#: prefs.js:77
+#: prefs.js:76
 msgid "Atareao"
 msgstr "Atareao"
 
-#: prefs.js:84
+#: prefs.js:83
 msgid "Copyright © 2018 Lorenzo Carbonell"
 msgstr "Copyright © 2018 Lorenzo Carbonell"
 
-#: prefs.js:91
+#: prefs.js:90
 msgid "This program is free software: you can redistribute it and/or modify"
 msgstr "Este programa es software libre: puede redistribuirlo y/o modificarlo"
 
-#: prefs.js:92
+#: prefs.js:91
 msgid "it under the terms of the GNU General Public License as published by"
 msgstr ""
 "bajo los términos de la Licencia General Pública de GNU publicada por la"
 
-#: prefs.js:93
+#: prefs.js:92
 msgid "the Free Software Foundation, either version 3 of the License, or"
 msgstr "Free Software Foundation, ya sea la versión 3 de la Licencia, o"
 
-#: prefs.js:94
+#: prefs.js:93
 msgid "(at your option) any later version."
 msgstr "(a su elección) cualquier versión posterior."
 
-#: prefs.js:95
+#: prefs.js:94
 msgid "This program is distributed in the hope that it will be useful,"
 msgstr "Este programa se distribuye con la esperanza de que sea útil,"
 
-#: prefs.js:96
+#: prefs.js:95
 msgid "but WITHOUT ANY WARRANTY; without even the implied warranty of"
 msgstr "pero SIN NINGUNA GARANTÍA; incluso sin la garantía implícita de"
 
-#: prefs.js:97
+#: prefs.js:96
 msgid "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the"
 msgstr "MERCANTIBILIDAD o CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la"
 
-#: prefs.js:98
+#: prefs.js:97
 msgid "GNU General Public License for more details."
 msgstr "Licencia General Pública de GNU para más detalles."
 
-#: prefs.js:99
+#: prefs.js:98
 msgid "You should have received a copy of the GNU General Public License"
 msgstr ""
 "Usted ha debido de recibir una copia de la Licencia General Pública de GNU"
 
-#: prefs.js:100
+#: prefs.js:99
 msgid ""
 "along with this program.  If not, see <a href=\"https://www.gnu.org/licenses/"
 "\">https://www.gnu.org/licenses/</a>."
 msgstr ""
 "junto con este programa. Si no, vea <a href=\"https://www.gnu.org/licenses/"
 "\">https://www.gnu.org/licenses/</a>."
-
-#: prefs.js:117
-msgid "Preferences"
-msgstr "Preferencias"
-
-#: prefs.js:121
-msgid "Select options"
-msgstr "Elige opciones"
-
-#: prefs.js:138
-msgid "About"
-msgstr "Acerca de..."

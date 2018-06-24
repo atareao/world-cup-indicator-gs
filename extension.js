@@ -274,6 +274,7 @@ class WorldCupIndicator extends PanelMenu.Button{
 let worldCupIndicator;
 
 function init(){
+    Convenience.initTranslations();
 }
 
 function enable(){
