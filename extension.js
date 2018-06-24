@@ -1,8 +1,7 @@
 /*
- * Disk Space Usage
- * This a extension to show disk space usage
- * of mounted devices
- *
+ * World Cup Indicator for GNOME Shell
+ * The World Cup in your desktop
+  *
  * Copyright (C) 2018
  *     Lorenzo Carbonell <lorenzo.carbonell.cerezo@gmail.com>,
  *
@@ -28,6 +27,7 @@ imports.gi.versions.Gdk = "3.0";
 imports.gi.versions.St = "1.0";
 
 const Gtk = imports.gi.Gtk;
+const GObject = imports.gi.GObject;
 const Gdk = imports.gi.Gdk;
 const Clutter = imports.gi.Clutter;
 const St = imports.gi.St;
@@ -40,32 +40,84 @@ const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const Util = imports.misc.util;
 const Main = imports.ui.main;
-const MessageTray = imports.ui.messageTray;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Extension = ExtensionUtils.getCurrentExtension();
 const Convenience = Extension.imports.convenience;
-const Manager = Extension.imports.dsu.Manager;
+const WorldCupClient = Extension.imports.wcapi.WorldCupClient;
 
-function notify(msg, details, icon='disk-space-usage') {
-    let source = new MessageTray.Source(Extension.uuid, icon);
-    Main.messageTray.add(source);
-    let notification = new MessageTray.Notification(source, msg, details);
-    notification.setTransient(true);
-    source.notify(notification);
+const Gettext = imports.gettext.domain(Extension.uuid);
+const _ = Gettext.gettext;
+
+class Ateam extends St.BoxLayout{
+    constructor(tname=null, ticon_name=null){
+        super({vertical: true,
+               y_align: Clutter.ActorAlign.CENTER,
+               x_align: Clutter.ActorAlign.CENTER});
+
+        this.team_name = new St.Label({text: tname,
+                                       y_align: Clutter.ActorAlign.CENTER,
+                                       x_align: Clutter.ActorAlign.CENTER,
+                                       style_class: 'team_name'});
+        this.add(this.team_name);
+
+        this.team_icon = new St.Icon({icon_name: ticon_name,
+                                      icon_size: 48,
+                                      y_align: Clutter.ActorAlign.CENTER,
+                                      x_align: Clutter.ActorAlign.CENTER});
+        this.add(this.team_icon);
+    }
 }
 
-function getColor(keyName){
-    let color = new Gdk.RGBA();
-    color.parse(getValue(keyName));
-    return color;
+class Match extends St.BoxLayout{
+    constructor(data=null){
+        super({vertical: true,
+               style_class: 'match',
+               y_align: Clutter.ActorAlign.CENTER,
+               x_align: Clutter.ActorAlign.CENTER});
+
+        this.venue = new St.Label({text: data['venue'],
+                                   style_class: 'venue',
+                                   y_align: Clutter.ActorAlign.CENTER,
+                                   x_align: Clutter.ActorAlign.CENTER});
+        this.add(this.venue);
+
+        let hbox = new St.BoxLayout({vertical: false,
+                                     y_align: Clutter.ActorAlign.CENTER,
+                                     x_align: Clutter.ActorAlign.CENTER});
+        this.home_team = new Ateam(data['home_team']['country'],
+                                   data['home_team']['code']);
+        hbox.add(this.home_team);
+
+        hbox.add(new St.Label({
+            text: '%s - %s'.format(data['home_team']['goals'].toString(),
+                                   data['away_team']['goals'].toString()),
+            y_align: Clutter.ActorAlign.CENTER,
+            x_align: Clutter.ActorAlign.CENTER,
+            style_class: 'goals'
+        }));
+
+        this.away_team = new Ateam(data['away_team']['country'],
+                                   data['away_team']['code']);
+        hbox.add(this.away_team);
+        this.add(hbox);
+
+        if(data['time']){
+            this.match_time = new St.Label({text: data['time'].toString(),
+                                            y_align: Clutter.ActorAlign.CENTER,
+                                            x_align: Clutter.ActorAlign.CENTER});
+        }else{
+            let ttime = new Date(data['datetime']);
+            ttime = new Date(ttime.getTime() - ttime.getTimezoneOffset()*60*1000);
+            ttime = ttime.toISOString().substr(11,5);
+            this.match_time = new St.Label({text: ttime,
+                                            y_align: Clutter.ActorAlign.CENTER,
+                                            x_align: Clutter.ActorAlign.CENTER});
+        }
+        this.add(this.match_time);
+    }
 }
 
-function getValue(keyName){
-    return Convenience.getSettings().get_value(keyName).deep_unpack();
-}
-
-
-class DiskSpaceUsageButton extends PanelMenu.Button{
+class WorldCupIndicator extends PanelMenu.Button{
     constructor(){
         super(St.Align.START);
         this._settings = Convenience.getSettings();
@@ -74,171 +126,167 @@ class DiskSpaceUsageButton extends PanelMenu.Button{
 
         let box = new St.BoxLayout();
 
-        let icon = new St.Icon({ icon_name: 'disk-space-usage',
+        let icon = new St.Icon({ icon_name: 'world-cup-indicator-gs',
                                  style_class: 'system-status-icon' });
         box.add(icon);
         this.actor.add_child(box);
 
-        this.manager = new Manager();
+        this.current_match_section = new PopupMenu.PopupBaseMenuItem();
+        this.menu.addMenuItem(this.current_match_section);
 
-        this.update();
-        this.sourceId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
-                                                 60,
-                                                 this.update.bind(this));
-        this._settings.connect("changed", ()=>{
-            this.update();
+        this.today_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Today matches'));
+        this.menu.addMenuItem(this.today_matches_section);
+
+        this.tomorrow_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Tomorrow matches'));
+        this.menu.addMenuItem(this.tomorrow_matches_section);
+
+        this.yesterday_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Yesterday matches'));
+        this.menu.addMenuItem(this.yesterday_matches_section);
+
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        let settingsMenuItem = new PopupMenu.PopupMenuItem(_("About"));
+        settingsMenuItem.connect('activate', () => {
+            GLib.spawn_command_line_async(
+                "gnome-shell-extension-prefs world-cup-indicator-gs@atareao.es"
+            );
         });
+        this.menu.addMenuItem(settingsMenuItem);
+
+        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        this.menu.addMenuItem(this._get_help());
+
+        this.worldCupClient = new WorldCupClient();
+        this.sourceCurrentId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                                        60, // every minute
+                                                        this.updateToday.bind(this));
+        this.sourceTodayId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                                      5 * 60, // every five minutes
+                                                      this.updateToday.bind(this));
+        this.sourceTomorrowId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT,
+                                                         60 * 60, // every hour
+                                                         this.updateTomorrow.bind(this));
+        this.updateCurrent();
+        this.updateToday();
+        this.updateTomorrow();
+        this.setYesterday();
     }
 
-    update(){
-        if(this.menu.numMenuItems > 0){
-            this.menu.removeAll();
-
+    setYesterday(){
+        if(this.yesterday_matches_section.menu.numMenuItems > 0){
+            this.yesterday_matches_section.menu.removeAll();
         }
-        let columns = getValue('columns');
-        let section = new PopupMenu.PopupMenuSection();
-        this.manager.update();
-        let rows = Math.ceil(this.manager.devices.length/columns);
-
-        let menurows = [];
-        for (let i = 0; i < this.manager.devices.length; i++) {
-
-            let currentrow = parseInt(i / columns);
-            let currentcolumn = i % columns;
-
-
-            if(currentcolumn == 0){
-                menurows.push(new St.BoxLayout({ vertical: false }));
-                //if(i > 0){
-                section.actor.add_actor(menurows[currentrow]);
-                //}
+        this.worldCupClient.get_yesterday_matches((message, result)=>{
+            let presult = JSON.parse(result);
+            if(this.yesterday_matches_section.menu.numMenuItems > 0){
+                this.yesterday_matches_section.menu.removeAll();
             }
-            let percentage = parseInt(
-                this.manager.devices[i].percentage.substring(
-                    0, this.manager.devices[i].percentage.length-1));
-            /*
-            if(percentage > 80){
-                notify('Atención',
-                       'El dispositivo %s ha superado el %s %'.format(
-                            this.manager.devices[i].device, percentage));
+            for(let amatch=0; amatch<presult.length; amatch++){
+                let item = new PopupMenu.PopupBaseMenuItem({
+                    can_focus: false,
+                    reactive: false
+                });
+                item.actor.add_actor(new Match(presult[amatch]));
+                this.yesterday_matches_section.menu.addMenuItem(item);
             }
-            */
-            menurows[currentrow].add(
-                this.createCanvas(70, 70, this.manager.devices[i]));
-        }
-        this.menu.addMenuItem(section);
+        });
         return true;
     }
 
-    createCanvas(width, heigth, device){
-        let text = device.device.substring(5);
-        let percentage = parseInt(device.percentage.substring(
-            0, device.percentage.length-1));
-
-        let container = new St.BoxLayout({ vertical: true });
-
-        container.add(new St.Label({y_align: Clutter.ActorAlign.CENTER,
-                                    x_align: Clutter.ActorAlign.CENTER,
-                                    text: text }));
-        let canvas = new Clutter.Canvas();
-
-        canvas.set_size (width, heigth);
-        canvas.connect('draw', (canvas, cr, width, height) =>{
-            cr.save()
-            cr.setSourceRGBA(1, 1, 1, 1);
-            //cr.setSourceRGB(1, 1, 1);
-            cr.rectangle(0, 0, width, height);
-            cr.fill();
-            cr.setSourceRGBA(0.24, 0.24, 0.24, 1);
-            //cr.setSourceRGB(0.24, 0.24, 0.24);
-            cr.rectangle(0, 0, width, height);
-            cr.fill();
-            cr.restore();
-
-            cr.save();
-            let linew = width * 0.15;
-            cr.setLineWidth(linew);
-            cr.setSourceRGB(0.30, 0.30, 0.30);
-            cr.arc((width - linew) / 2,
-                   (height - linew) / 2,
-                   parseInt((width - linew) / 2 * 0.8),
-                   0.00001, 0);
-            cr.stroke();
-            cr.restore();
-
-            cr.save();
-            cr.setLineWidth(linew);
-            if(percentage < getValue('warning')){
-                let color = getColor('normal-color');
-                cr.setSourceRGB(color.red, color.green, color.blue);
-            }else if(percentage < getValue('danger')){
-                let color = getColor('warning-color');
-                cr.setSourceRGB(color.red, color.green, color.blue);
-            }else{
-                let color = getColor('danger-color');
-                cr.setSourceRGB(color.red, color.green, color.blue);
+    updateCurrent(){
+        this.worldCupClient.get_current_match((message, result)=>{
+            this.current_match_section.actor.remove_all_children();
+            if(result != null){
+                let presult = JSON.parse(result);
+                this.current_match_section.actor.add_actor(new Match(presult));
             }
-
-            cr.arc((width - linew) / 2,
-                   (height - linew) / 2,
-                   parseInt((width - linew) / 2 * 0.8),
-                   Math.PI * 2* (1 - percentage / 100), 0);
-            cr.stroke();
-            cr.restore();
-
-            cr.save();
-
-            cr.setSourceRGB(0.85, 0.85, 0.85);
-            this.write_centered_text(cr,
-                                     width/2,
-                                     height/2,
-                                     percentage + "%",
-                                     'Ubuntu',
-                                     width/7)
-            cr.restore();
-
         });
-        canvas.invalidate();
-
-        let dummy = new Clutter.Actor();
-        dummy.set_content(canvas);
-        dummy.set_size(width, heigth);
-
-        container.add(dummy);
-        return container;
+        return true;
     }
 
-    write_centered_text(cr, x, y, text, font, size){
-        let pg_layout = PangoCairo.create_layout(cr);
-        let pg_context = pg_layout.get_context();
-        pg_layout.set_font_description(
-            Pango.FontDescription.from_string('%s %s'.format(font, size)));
-        pg_layout.set_text(text, -1);
+    updateToday(){
+        this.worldCupClient.get_today_matches((message, result)=>{
+            let presult = JSON.parse(result);
 
-        PangoCairo.update_layout(cr, pg_layout);
-        let text_size = pg_layout.get_pixel_size();
+            if(this.today_matches_section.menu.numMenuItems > 0){
+                this.today_matches_section.menu.removeAll();
+            }
+            for(let amatch=0; amatch<presult.length; amatch++){
+                let item = new PopupMenu.PopupBaseMenuItem({
+                    can_focus: false,
+                    reactive: false
+                });
+                item.actor.add_actor(new Match(presult[amatch]));
+                this.today_matches_section.menu.addMenuItem(item);
+            }
+        });
+        return true;
+    }
+    updateTomorrow(){
+        this.worldCupClient.get_tomorrow_matches((message, result)=>{
+            let presult = JSON.parse(result);
 
-        cr.moveTo(x - text_size[0]/2, y - size/2);
-        cr.setFontSize(size);
-        cr.showText(text);
+            if(this.tomorrow_matches_section.menu.numMenuItems > 0){
+                this.tomorrow_matches_section.menu.removeAll();
+            }
+            for(let amatch=0; amatch<presult.length; amatch++){
+                let item = new PopupMenu.PopupBaseMenuItem({
+                    can_focus: false,
+                    reactive: false
+                });
+                item.actor.add_actor(new Match(presult[amatch]));
+                this.tomorrow_matches_section.menu.addMenuItem(item);
+            }
+        });
+        return true;
     }
 
+    _create_help_menu_item(text, icon_name, url){
+        let menu_item = new PopupMenu.PopupImageMenuItem(text, icon_name);
+        menu_item.connect('activate', () => {
+            Gio.app_info_launch_default_for_uri(url, null);
+        });
+        return menu_item;
+    }
+
+    _get_help(){
+        let menu_help = new PopupMenu.PopupSubMenuMenuItem(_('Help'));
+        menu_help.menu.addMenuItem(this._create_help_menu_item(
+            _('Project Page'), 'github', 'https://github.com/atareao/world-cup-indicator-gs'));
+        menu_help.menu.addMenuItem(this._create_help_menu_item(
+            _('Get help online...'), 'help-online', 'https://www.atareao.es/aplicacion/el-mundial-en-ubuntu/'));
+        menu_help.menu.addMenuItem(this._create_help_menu_item(
+            _('Report a bug...'), 'bug', 'https://github.com/atareao/world-cup-indicator-gs/issues'));
+        menu_help.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        menu_help.menu.addMenuItem(this._create_help_menu_item(
+            _('El atareao'), 'web', 'https://www.atareao.es'));
+        menu_help.menu.addMenuItem(this._create_help_menu_item(
+            _('Follow me in Twitter'), 'twitter', 'https://twitter.com/atareao'));
+        menu_help.menu.addMenuItem(this._create_help_menu_item(
+            _('Follow me in Facebook'), 'facebook', 'http://www.facebook.com/elatareao'));
+        menu_help.menu.addMenuItem(this._create_help_menu_item(
+            _('Follow me in Google+'), 'google', 'https://plus.google.com/118214486317320563625/posts'));
+        return menu_help;
+    }
 }
 
-let diskSpaceUsageButton;
+let worldCupIndicator;
 
 function init(){
 }
 
 function enable(){
-    diskSpaceUsageButton = new DiskSpaceUsageButton();
-    Main.panel.addToStatusArea('DiskSpaceUsageButton',
-                               diskSpaceUsageButton,
+    worldCupIndicator = new WorldCupIndicator();
+    Main.panel.addToStatusArea('WorldCupIndicator',
+                               worldCupIndicator,
                                0,
                                'right');
 }
 
 function disable() {
-    GLib.source_remove(this.sourceId);
-    diskSpaceUsageButton.destroy();
+    GLib.source_remove(this.sourceCurrentId);
+    GLib.source_remove(this.sourceTodayId);
+    GLib.source_remove(this.sourceTomorrowId);
+    worldCupIndicator.destroy();
 }

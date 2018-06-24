@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-19 21:26+0200\n"
+"POT-Creation-Date: 2018-06-23 20:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,51 +17,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:6
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:6
 msgid "Columns"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:7
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:7
 msgid "Number of partitions for row"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:11
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:11
 msgid "Normal color"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:12
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:12
 msgid "Normal color for pie"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:16
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:16
 msgid "Warning"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:17
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:17
 msgid "Show warning color when space over this value"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:21
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:21
 msgid "Warning color"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:22
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:22
 msgid "Warning color for pie"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:26
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:26
 msgid "Danger"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:27
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:27
 msgid "Show danger color when space over this value"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:31
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:31
 msgid "Danger color"
 msgstr ""
 
-#: schemas/es.atareao.disk-space-usage.gschema.xml:32
+#: schemas/es.atareao.world-cup-indicator-gs.gschema.xml:32
 msgid "Danger color for pie"
 msgstr ""
 

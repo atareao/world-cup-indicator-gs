@@ -1,8 +1,7 @@
 /*
- * Disk Space Usage
- * This a extension to show disk space usage
- * of mounted devices
- *
+ * World Cup Indicator for GNOME Shell
+ * The World Cup in your desktop
+  *
  * Copyright (C) 2018
  *     Lorenzo Carbonell <lorenzo.carbonell.cerezo@gmail.com>,
  *
@@ -23,6 +22,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
  
  const Lang = imports.lang;
 

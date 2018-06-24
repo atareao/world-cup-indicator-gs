@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="disk-space-usage@atareao.es">
-     <schema path="/es/atareao/disk-space-usage/" id="es.atareao.disk-space-usage">
+<schemalist gettext-domain="world-cup-indicator-gs@atareao.es">
+     <schema path="/es/atareao/world-cup-indicator-gs/" id="es.atareao.world-cup-indicator-gs">
         <key type="i" name="columns">
           <default>3</default>
           <summary>Columns</summary>

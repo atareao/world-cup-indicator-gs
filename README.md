@@ -1,6 +1,6 @@
-## Disk Space Usage
+## World Cup Indicator for GNOME Shell
 
-This extension shows the partition size of the mounted partitions in real time.
+The World Cup in your Ubuntu Desktop
 
 ## Instalation
 

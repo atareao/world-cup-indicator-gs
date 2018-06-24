@@ -1,8 +1,7 @@
 /*
- * Disk Space Usage
- * This a extension to show disk space usage
- * of mounted devices
- *
+ * World Cup Indicator for GNOME Shell
+ * The World Cup in your desktop
+  *
  * Copyright (C) 2018
  *     Lorenzo Carbonell <lorenzo.carbonell.cerezo@gmail.com>,
  *
@@ -52,13 +51,13 @@ class AboutWidget extends Gtk.Grid{
         });
 
         let aboutIcon = new Gtk.Image({
-            icon_name: "disk-space-usage",
+            icon_name: "world-cup-indicator-gs",
             pixel_size: 128
         });
         this.add(aboutIcon);
 
         let aboutName = new Gtk.Label({
-            label: "<b>" + _("Disk Space Usage") + "</b>",
+            label: "<b>" + _("World Cup Indicator") + "</b>",
             use_markup: true
         });
         this.add(aboutName);
@@ -106,19 +105,20 @@ class AboutWidget extends Gtk.Grid{
     }
 }
 
-class DiskSpaceUsagePreferencesWidget extends PreferencesWidget.Stack{
+class WorldCupIndicatorPreferencesWidget extends PreferencesWidget.Stack{
     constructor(){
         super();
 
         Gtk.IconTheme.get_default().append_search_path(
             Extension.dir.get_child('icons').get_path());
 
-        let preferencesPage = new PreferencesWidget.Page();
-        this.add_titled(preferencesPage, "preferences", _("Preferences"));
+        //let preferencesPage = new PreferencesWidget.Page();
+        //this.add_titled(preferencesPage, "preferences", _("Preferences"));
 
-        var settings = Convenience.getSettings();
+        //var settings = Convenience.getSettings();
         
-        let appearanceSection = preferencesPage.addSection(_("Select options"), null, {});
+        //let appearanceSection = preferencesPage.addSection(_("Select options"), null, {});
+        /*
         appearanceSection.addGSetting(settings, "columns");
         appearanceSection.addGSetting(settings,
                                       "normal-color",
@@ -131,7 +131,7 @@ class DiskSpaceUsagePreferencesWidget extends PreferencesWidget.Stack{
         appearanceSection.addGSetting(settings,
                                       "danger-color",
                                       PreferencesWidget.ColorSetting);
-
+        */
         // About Page
         let aboutPage = this.addPage(
             "about",
@@ -144,7 +144,7 @@ class DiskSpaceUsagePreferencesWidget extends PreferencesWidget.Stack{
 }
 
 function buildPrefsWidget() {
-    let preferencesWidget = new DiskSpaceUsagePreferencesWidget();
+    let preferencesWidget = new WorldCupIndicatorPreferencesWidget();
     GLib.timeout_add(GLib.PRIORITY_DEFAULT, 0, () => {
         let prefsWindow = preferencesWidget.get_toplevel()
         prefsWindow.get_titlebar().custom_title = preferencesWidget.switcher;
