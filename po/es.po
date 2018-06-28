@@ -68,15 +68,15 @@ msgid "Danger color for pie"
 msgstr "Color de peligro para la tarta"
 
 #: extension.js:137
-msgid "Today matches"
+msgid "Today's matches"
 msgstr "Los partidos de hoy"
 
 #: extension.js:140
-msgid "Tomorrow matches"
+msgid "Tomorrow's matches"
 msgstr "Los partidos para mañana"
 
 #: extension.js:143
-msgid "Yesterday matches"
+msgid "Yesterday's matches"
 msgstr "Los partidos de ayer"
 
 #: extension.js:148 prefs.js:138

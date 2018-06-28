@@ -134,13 +134,13 @@ class WorldCupIndicator extends PanelMenu.Button{
         this.current_match_section = new PopupMenu.PopupMenuSection();
         this.menu.addMenuItem(this.current_match_section);
 
-        this.today_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Today matches'));
+        this.today_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Today\'s matches'));
         this.menu.addMenuItem(this.today_matches_section);
 
-        this.tomorrow_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Tomorrow matches'));
+        this.tomorrow_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Tomorrow\'s matches'));
         this.menu.addMenuItem(this.tomorrow_matches_section);
 
-        this.yesterday_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Yesterday matches'));
+        this.yesterday_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Yesterday\'s matches'));
         this.menu.addMenuItem(this.yesterday_matches_section);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
