@@ -135,12 +135,15 @@ class WorldCupIndicator extends PanelMenu.Button{
         this.menu.addMenuItem(this.current_match_section);
 
         this.today_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Today\'s matches'));
+        this.today_matches_section.actor.hide();
         this.menu.addMenuItem(this.today_matches_section);
 
         this.tomorrow_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Tomorrow\'s matches'));
+        this.tomorrow_matches_section.actor.hide();
         this.menu.addMenuItem(this.tomorrow_matches_section);
 
         this.yesterday_matches_section = new PopupMenu.PopupSubMenuMenuItem(_('Yesterday\'s matches'));
+        this.yesterday_matches_section.actor.hide();
         this.menu.addMenuItem(this.yesterday_matches_section);
 
         this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
@@ -209,13 +212,18 @@ class WorldCupIndicator extends PanelMenu.Button{
             if(this.yesterday_matches_section.menu.numMenuItems > 0){
                 this.yesterday_matches_section.menu.removeAll();
             }
-            for(let amatch=0; amatch<presult.length; amatch++){
-                let item = new PopupMenu.PopupBaseMenuItem({
-                    can_focus: false,
-                    reactive: false
-                });
-                item.actor.add_actor(new Match(presult[amatch]));
-                this.yesterday_matches_section.menu.addMenuItem(item);
+            if(presult.length > 0){
+                this.yesterday_matches_section.actor.show();
+                for(let amatch=0; amatch<presult.length; amatch++){
+                    let item = new PopupMenu.PopupBaseMenuItem({
+                        can_focus: false,
+                        reactive: false
+                    });
+                    item.actor.add_actor(new Match(presult[amatch]));
+                    this.yesterday_matches_section.menu.addMenuItem(item);
+                }
+            }else{
+                this.yesterday_matches_section.actor.hide();
             }
         });
         return true;
@@ -224,17 +232,21 @@ class WorldCupIndicator extends PanelMenu.Button{
     updateCurrent(){
         this.worldCupClient.get_current_match((message, result)=>{
             let presult = JSON.parse(result);
-
             if(this.current_match_section.numMenuItems > 0){
                 this.current_match_section.removeAll();
             }
-            for(let amatch=0; amatch<presult.length; amatch++){
-                let item = new PopupMenu.PopupBaseMenuItem({
-                    can_focus: false,
-                    reactive: false
-                });
-                item.actor.add_actor(new Match(presult[amatch]));
-                this.current_match_section.addMenuItem(item);
+            if(presult.length > 0){
+                this.current_match_section.actor.show();
+                for(let amatch=0; amatch<presult.length; amatch++){
+                    let item = new PopupMenu.PopupBaseMenuItem({
+                        can_focus: false,
+                        reactive: false
+                    });
+                    item.actor.add_actor(new Match(presult[amatch]));
+                    this.current_match_section.addMenuItem(item);
+                }
+            }else{
+                this.current_match_section.actor.hide();
             }
         });
         return true;
@@ -247,13 +259,18 @@ class WorldCupIndicator extends PanelMenu.Button{
             if(this.today_matches_section.menu.numMenuItems > 0){
                 this.today_matches_section.menu.removeAll();
             }
-            for(let amatch=0; amatch<presult.length; amatch++){
-                let item = new PopupMenu.PopupBaseMenuItem({
-                    can_focus: false,
-                    reactive: false
-                });
-                item.actor.add_actor(new Match(presult[amatch]));
-                this.today_matches_section.menu.addMenuItem(item);
+            if(presult.length > 0){
+                this.today_matches_section.actor.show();
+                for(let amatch=0; amatch<presult.length; amatch++){
+                    let item = new PopupMenu.PopupBaseMenuItem({
+                        can_focus: false,
+                        reactive: false
+                    });
+                    item.actor.add_actor(new Match(presult[amatch]));
+                    this.today_matches_section.menu.addMenuItem(item);
+                }
+            }else{
+                this.today_matches_section.actor.hide();
             }
         });
         return true;
@@ -266,13 +283,18 @@ class WorldCupIndicator extends PanelMenu.Button{
             if(this.tomorrow_matches_section.menu.numMenuItems > 0){
                 this.tomorrow_matches_section.menu.removeAll();
             }
-            for(let amatch=0; amatch<presult.length; amatch++){
-                let item = new PopupMenu.PopupBaseMenuItem({
-                    can_focus: false,
-                    reactive: false
-                });
-                item.actor.add_actor(new Match(presult[amatch]));
-                this.tomorrow_matches_section.menu.addMenuItem(item);
+            if(presult.length > 0){
+                this.tomorrow_matches_section.actor.show();
+                for(let amatch=0; amatch<presult.length; amatch++){
+                    let item = new PopupMenu.PopupBaseMenuItem({
+                        can_focus: false,
+                        reactive: false
+                    });
+                    item.actor.add_actor(new Match(presult[amatch]));
+                    this.tomorrow_matches_section.menu.addMenuItem(item);
+                }
+            }else{
+                this.tomorrow_matches_section.actor.hide();
             }
         });
         return true;

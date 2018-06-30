@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WordReference Search Provider - 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-24 18:07+0200\n"
+"POT-Creation-Date: 2018-06-30 19:13+0200\n"
 "PO-Revision-Date: 2018-06-02 19:46+0200\n"
 "Last-Translator: Lorenzo <lorenzo.carbonell.cerezo@gmail.com>\n"
 "Language-Team: Spanish\n"
@@ -71,48 +71,48 @@ msgstr "Color de peligro para la tarta"
 msgid "Today's matches"
 msgstr "Los partidos de hoy"
 
-#: extension.js:140
+#: extension.js:141
 msgid "Tomorrow's matches"
 msgstr "Los partidos para mañana"
 
-#: extension.js:143
+#: extension.js:145
 msgid "Yesterday's matches"
 msgstr "Los partidos de ayer"
 
-#: extension.js:148 prefs.js:138
+#: extension.js:151 prefs.js:138
 msgid "About"
 msgstr "Acerca de..."
 
-#: extension.js:263
+#: extension.js:312
 msgid "Help"
 msgstr "Ayuda"
 
-#: extension.js:265
+#: extension.js:314
 msgid "Project Page"
 msgstr "Página del proyecto"
 
-#: extension.js:267
+#: extension.js:316
 msgid "Get help online..."
 msgstr "Encuentra ayuda en línea..."
 
-#: extension.js:269
+#: extension.js:318
 msgid "Report a bug..."
 msgstr "Informa de un error..."
 
-#: extension.js:272
+#: extension.js:321
 #, fuzzy
 msgid "El atareao"
 msgstr "atareao"
 
-#: extension.js:274
+#: extension.js:323
 msgid "Follow me in Twitter"
 msgstr "Sígueme en Twitter"
 
-#: extension.js:276
+#: extension.js:325
 msgid "Follow me in Facebook"
 msgstr "Sígueme en Facebook"
 
-#: extension.js:278
+#: extension.js:327
 msgid "Follow me in Google+"
 msgstr "Sígueme en Google+"
 

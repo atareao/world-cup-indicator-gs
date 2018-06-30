@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-24 18:07+0200\n"
+"POT-Creation-Date: 2018-06-30 19:13+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,47 +69,47 @@ msgstr ""
 msgid "Today's matches"
 msgstr ""
 
-#: extension.js:140
+#: extension.js:141
 msgid "Tomorrow's matches"
 msgstr ""
 
-#: extension.js:143
+#: extension.js:145
 msgid "Yesterday's matches"
 msgstr ""
 
-#: extension.js:148 prefs.js:138
+#: extension.js:151 prefs.js:138
 msgid "About"
 msgstr ""
 
-#: extension.js:263
+#: extension.js:312
 msgid "Help"
 msgstr ""
 
-#: extension.js:265
+#: extension.js:314
 msgid "Project Page"
 msgstr ""
 
-#: extension.js:267
+#: extension.js:316
 msgid "Get help online..."
 msgstr ""
 
-#: extension.js:269
+#: extension.js:318
 msgid "Report a bug..."
 msgstr ""
 
-#: extension.js:272
+#: extension.js:321
 msgid "El atareao"
 msgstr ""
 
-#: extension.js:274
+#: extension.js:323
 msgid "Follow me in Twitter"
 msgstr ""
 
-#: extension.js:276
+#: extension.js:325
 msgid "Follow me in Facebook"
 msgstr ""
 
-#: extension.js:278
+#: extension.js:327
 msgid "Follow me in Google+"
 msgstr ""
 
