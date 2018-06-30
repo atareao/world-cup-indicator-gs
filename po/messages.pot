@@ -66,15 +66,15 @@ msgid "Danger color for pie"
 msgstr ""
 
 #: extension.js:137
-msgid "Today matches"
+msgid "Today's matches"
 msgstr ""
 
 #: extension.js:140
-msgid "Tomorrow matches"
+msgid "Tomorrow's matches"
 msgstr ""
 
 #: extension.js:143
-msgid "Yesterday matches"
+msgid "Yesterday's matches"
 msgstr ""
 
 #: extension.js:148 prefs.js:138
