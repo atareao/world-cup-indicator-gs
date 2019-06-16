@@ -1,0 +1,15 @@
+{
+    "description": "FIFA Women's World Cup in your desktop",
+    "name": "FIFA Women's World Cup Indicator",
+    "shell-version": [
+        "3.26",
+        "3.28",
+		"3.30",
+		"3.32"
+    ],
+    "url": "https://www.atareao.es",
+    "uuid": "world-cup-indicator-gs@atareao.es",
+    "gettext-domain": "world-cup-indicator-gs@atareao.es",
+    "settings-schema": "es.atareao.world-cup-indicator-gs",
+    "version": 4
+ }
