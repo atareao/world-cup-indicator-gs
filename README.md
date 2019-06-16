@@ -23,7 +23,7 @@ sudo apt install gnome-shell-extension-world-cup-indicator-gs
 
 ## Author
 
-👤 **Lorenzo Carbonel**
+👤 **Lorenzo Carbonell**
 
 * Twitter: [@atareao](https://twitter.com/atareao)
 * Github: [@atareao](https://github.com/atareao)
